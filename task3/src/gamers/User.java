@@ -42,10 +42,19 @@ public class User {
         return userInput.charAt(0) == 'Y';
     }
 
-	public int enterKey() {
+	public byte[] enterKey() {
 		System.out.print("Please, enter key");
         String userInput = inputScanner.nextLine();
-        return Integer.parseInt(userInput);
+        return hexStringToByteArray(userInput);
+	}
+	public static byte[] hexStringToByteArray(String s) {
+	    int len = s.length();
+	    byte[] data = new byte[len / 2];
+	    for (int i = 0; i < len; i += 2) {
+	        data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+	                             + Character.digit(s.charAt(i+1), 16));
+	    }
+	    return data;
 	}
 
 	public String enterMove() {

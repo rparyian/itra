@@ -1,25 +1,30 @@
 package gamers;
-
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import de.jstacs.utils.random.RandomNumberGenerator;
+import java.security.SecureRandom;
+
 import main.Hmac_impl;
 
-public class Computer extends RandomNumberGenerator {
-	private int key;
+public class Computer  {
+	SecureRandom random = new SecureRandom();
+	private byte[] key=new byte[16];
 	private String HMAC;
 	private int move;
 	
-    public int getKey() {
-		return key;
+    public String getKey() {
+    	StringBuilder result = new StringBuilder();
+        for (byte temp : key) {
+            result.append(String.format("%02x", temp));
+        }
+        return result.toString();
 	}
     
     public int getMove(String[] args) {
-	key=next(128);
-	move=nextInt(args.length);
+    	random.nextBytes(key);
+	move=random.nextInt(args.length);
 	System.out.println("Computer made a move");
 	try {
-	      byte[] hmacSha256 = Hmac_impl.calcHmacSha256(BigInteger.valueOf(key).toByteArray(), args[move].getBytes("UTF-8"));
+	      byte[] hmacSha256 = Hmac_impl.calcHmacSha256(key, args[move].getBytes("UTF-8"));
 	      HMAC=String.format("Hmac: %032x", new BigInteger(1, hmacSha256));
 	      System.out.println(HMAC); 
 	    } catch (UnsupportedEncodingException e) {
@@ -27,16 +32,9 @@ public class Computer extends RandomNumberGenerator {
 	    }
 	return move;
 	  }
-    
-    @Override
-    protected synchronized int next(int arg0) {
-	// TODO Auto-generated method stub
-	return super.next(arg0);
-}
-    
-    public boolean checkHMAC(int key, String move) {
+    public boolean checkHMAC(byte[] key, String move) {
 	  try {
-	      byte[] hmacSha256 = Hmac_impl.calcHmacSha256(BigInteger.valueOf(key).toByteArray(), move.getBytes("UTF-8"));
+	      byte[] hmacSha256 = Hmac_impl.calcHmacSha256(key, move.getBytes("UTF-8"));
 	      String HMAC1=String.format("Hmac: %032x", new BigInteger(1, hmacSha256));
 	      System.out.println(HMAC1); 
 	      if (HMAC1.equals(HMAC)) {
