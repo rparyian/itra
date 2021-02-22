@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+    <p>Main checkbox</p>
+    <input id="inputCheckbox" type="checkbox">
+    <p>Главный чекбокс вкл/выкл нас</p>
+    <div >
+        <input class="row-checkbox" type="checkbox">
+        <input class="row-checkbox" type="checkbox">
+        <input class="row-checkbox" type="checkbox">
+        <input class="row-checkbox" type="checkbox">
+    </div>
+
+</div>
+<script>
+
+    function toggleCheckBoxes() {
+        const checkboxChecked = this.checked;
+        for (let checkbox of document.querySelectorAll('.row-checkbox'))
+            checkbox.checked = checkboxChecked
+    }
+
+    let checkBox = document.getElementById('inputCheckbox');
+    checkBox.addEventListener('change', toggleCheckBoxes);
+</script>
+</body>
+</html>
